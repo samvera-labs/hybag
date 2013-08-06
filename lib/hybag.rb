@@ -1,5 +1,9 @@
-require "hybag/version"
+require 'active_fedora'
 
 module Hybag
-  # Your code goes here...
+  extend ActiveSupport::Autoload
+
+  autoload :Version
+
+
 end
