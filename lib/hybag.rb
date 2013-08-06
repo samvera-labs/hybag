@@ -5,6 +5,6 @@ module Hybag
 
   autoload :Version
   autoload :Baggable
-
+  autoload :Validator
 
 end
