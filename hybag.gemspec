@@ -24,4 +24,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'active-fedora'
   spec.add_dependency 'activesupport', '>= 5.2.13', '< 5.0'
+  spec.add_dependency 'bagit'
 end

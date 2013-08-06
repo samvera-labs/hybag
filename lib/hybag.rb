@@ -4,6 +4,7 @@ module Hybag
   extend ActiveSupport::Autoload
 
   autoload :Version
+  autoload :Baggable
 
 
 end
