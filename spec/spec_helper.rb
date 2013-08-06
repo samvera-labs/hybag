@@ -5,6 +5,7 @@ require 'hybag'
 #Resque.inline = Rails.env.test?
 ROOT_PATH = File.dirname(__FILE__)
 DUMMY_PATH = File.join(ROOT_PATH,"dummies")
+FIXTURE_PATH = File.join(ROOT_PATH, "fixtures")
 
 # Support
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

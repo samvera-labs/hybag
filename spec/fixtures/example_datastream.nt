@@ -1,0 +1,13 @@
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/type> "Image" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/spatial> "Benton County (Ore.)" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/created> "2004-03-17" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/description> "Mexican workers in Benton County" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/rights> "Permission to use must be obtained from OSU Archives." .
+<http://oregondigital.org/resource/oregondigital:61> <http://multimedialab.elis.ugent.be/users/samcoppe/ontologies/Premis/premis.owl#originalName> "P0120_2567" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/title> "Mexican workers" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/subject> "Agricultural laborers--Mexican--Oregon" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/subject> "Agricultural laborers--Housing--Oregon" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/identifier> "P120:2567" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/modified> "2011-12-19" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/hasFormat> "B&W print" .
+<http://oregondigital.org/resource/oregondigital:61> <http://purl.org/dc/terms/date> "1944" .
