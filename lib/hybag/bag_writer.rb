@@ -2,9 +2,9 @@ module Hybag
   class BagWriter
     attr_reader :bag
     attr_reader :object
-    def initialize(object, bag)
+    def initialize(object)
       @object = object
-      @bag = bag
+      @bag = object.bag
     end
     def write!
       # add the datastreams to the bag, then manifest
@@ -21,7 +21,9 @@ module Hybag
             }
           else
             bag.add_file(label) { |f|
-              f.puts ds.content.force_encoding('UTF-8')
+              content = ds.content
+              content = ds.content.read if ds.content.respond_to?(:read)
+              f.puts content.force_encoding('UTF-8')
             }
           end
         end
@@ -45,9 +47,6 @@ module Hybag
         if ds.mimeType.blank?
           ext = ''
         else
-          puts "Looking.."
-          puts MIME::Types
-          puts ds.mimeType
           ext = MIME::Types[ds.mimeType] || ''
           ext = ext.first.extensions[0] unless ext.blank?
 

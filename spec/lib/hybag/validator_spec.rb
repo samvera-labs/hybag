@@ -3,8 +3,12 @@ require File.join(DUMMY_PATH, "baggable_dummy")
 
 describe Hybag::Validator do
   include FakeFS::SpecHelpers
-  let(:dummy) {BaggableDummy.new}
-  subject{Hybag::Validator.new(dummy, '/tmp/bag')}
+  let(:dummy) do
+    d = BaggableDummy.new
+    d.stub(:persisted?).and_return(true)
+    return d
+  end
+  subject{Hybag::Validator.new(dummy)}
   describe "validations" do
     context "when the given path exists" do
       before(:each) do
