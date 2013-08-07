@@ -1,6 +1,6 @@
 # Hybag
 
-TODO: Write a gem description
+A Hydra gem for adding BagIt functionality to ActiveFedora models.
 
 ## Installation
 
@@ -18,7 +18,25 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Include the module in ActiveFedora models you'd like to be baggable
+
+```ruby
+  class TestClass < ActiveFedora::Base
+    include Hybag::Baggable
+  end
+```
+
+### Examples
+
+#### Write the item to disk in rails_root/tmp/bags/filler/pid
+```ruby
+  test_class = TestClass.new.write_bag('filler')
+```
+
+#### Delete a bag that was written already
+```ruby
+  test_class.delete_bag
+```
 
 ## Contributing
 

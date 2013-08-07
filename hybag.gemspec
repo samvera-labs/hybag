@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Hybag::VERSION
   spec.authors       = ["Trey Terrell"]
   spec.email         = ["trey.terrell@oregonstate.edu"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = 'A Hydra gem for adding BagIt functionality to ActiveFedora models.'
+  spec.summary       = 'A Hydra gem for adding BagIt functionality to ActiveFedora models.'
   spec.homepage      = ""
   spec.license       = "MIT"
 
