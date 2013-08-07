@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'fakefs'
 
   spec.add_dependency 'active-fedora'
-  spec.add_dependency 'activesupport', '>= 3.2.13', '< 5.0'
+  spec.add_dependency 'activesupport', '>= 3.2.0', '< 5.0'
   spec.add_dependency 'bagit', '0.3.2.pre'
   spec.add_dependency 'mime-types'
 end
