@@ -1,4 +1,5 @@
 require 'active_fedora'
+require 'bagit'
 
 module Hybag
   extend ActiveSupport::Autoload

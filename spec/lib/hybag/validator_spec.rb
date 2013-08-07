@@ -10,8 +10,8 @@ describe Hybag::Validator do
       before(:each) do
         FileUtils.mkdir_p '/tmp/bag'
       end
-      it "should be invalid" do
-        expect(subject).not_to be_valid
+      it "should be valid" do
+        expect(subject).to be_valid
       end
     end
     context "when the given path doesn't exist" do
