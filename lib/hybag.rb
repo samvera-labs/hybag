@@ -1,5 +1,6 @@
 require 'active_fedora'
 require 'bagit'
+require 'mime-types'
 
 module Hybag
   extend ActiveSupport::Autoload

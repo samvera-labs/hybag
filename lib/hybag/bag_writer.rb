@@ -42,13 +42,22 @@ module Hybag
       if ds.kind_of?(ActiveFedora::NtriplesRDFDatastream)
         ext = 'nt'
       else
-        if ds.mimeType == ''
+        if ds.mimeType.blank?
           ext = ''
         else
-          ext = MIME::Types[ds.mimeType].first.extensions[0]
+          puts "Looking.."
+          puts MIME::Types
+          puts ds.mimeType
+          ext = MIME::Types[ds.mimeType] || ''
+          ext = ext.first.extensions[0] unless ext.blank?
+
         end
       end
       return '.' + ext
+    end
+
+    def bag_fedora_tags
+      object.datastreams.select { |label, ds| ds.is_a?(ActiveFedora::RelsExtDatastream) or ds.dsid == "DC"}
     end
 
 
