@@ -9,6 +9,7 @@ module Hybag
 
     def ingest!
       raise "Unable to determine model from bag" if model_name.blank?
+      new_object = ActiveFedora.class_from_string(model_name.to_s).new
     end
 
     private
@@ -20,15 +21,13 @@ module Hybag
     end
 
     def extract_model_from_rels
-      model_name = nil
       if File.exist?(fedora_rels)
-        # Move this out?
-        model_predicate = "info:fedora/fedora-system:def/model#hasModel"
-        rels_graph = RDF::Graph.load(fedora_rels)
-        if(rels_graph.has_predicate?(model_predicate))
-          model_name = rels_graph.to_a.select{|x| x.predicate == model_predicate}[0].object.to_s
-          model_name["info:fedora/afmodel:"] = ''
-        end
+        filler_object = ActiveFedora::Base.new
+        rels_datastream = ActiveFedora::RelsExtDatastream.new
+        rels_datastream.model = filler_object
+        ActiveFedora::RelsExtDatastream.from_xml(File.read(fedora_rels).strip,rels_datastream)
+        model_name = ActiveFedora::ContentModel.known_models_for(filler_object).first
+        return model_name.to_s
       end
       return model_name
     end

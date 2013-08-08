@@ -80,6 +80,19 @@ describe Hybag::Ingester do
           expect{subject.ingest!}.to raise_error("Unable to determine model from bag")
         end
       end
+      context "when there is a model" do
+        it "should return an instance of that model" do
+          expect(subject.ingest!).to be_kind_of(BaggableDummy)
+        end
+        context "and that model is not defined" do
+          before(:each) do
+            subject.stub(:model_name).and_return("Blabla")
+          end
+          it "should raise an error" do
+            expect{subject.ingest!}.to raise_error
+          end
+        end
+      end
     end
   end
 end
