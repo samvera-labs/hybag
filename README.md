@@ -18,12 +18,36 @@ Or install it yourself as:
 
 ## Usage
 
-### Include the module in ActiveFedora models you'd like to be baggable
+#### Include the module in ActiveFedora models you'd like to be baggable
 
 ```ruby
   class TestClass < ActiveFedora::Base
     include Hybag::Baggable
   end
+```
+
+#### To convert an exported bag back to a model
+
+**NOTE:** Right now for this to work there must be datastreams defined on the discovered model which match the
+metadata datastream IDs as tag files and content datastream IDs as data files. This means for a descMetadata
+datastream to be populated bag_root/descMetadata.* (where * is the extension) must exist.
+
+```ruby
+  result = Hybag.ingest(BagIt::Bag.new("/path/to/bag"))
+  result.class # => Model in fedora/rels-ext.rdf (preferred) or hybag.yml in bag root. More info below.
+  result.persisted? # => false
+```
+
+## Configuration
+
+#### Determining the model name.
+
+Currently the model name is determined from the bag's fedora/rels-ext.rdf file (which Hybag::Baggable exports)
+or a config file stored in bag_root/hybag.yml. The fedora rels-ext takes precedence. An example Hybag.yml format is
+below
+
+```yml
+model: TestModel
 ```
 
 ### Examples
