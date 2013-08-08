@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'A Hydra gem for adding BagIt functionality to ActiveFedora models.'
   spec.summary       = 'A Hydra gem for adding BagIt functionality to ActiveFedora models.'
   spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.license       = "APACHE2"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
