@@ -11,7 +11,7 @@ module Hybag
       raise "Unable to determine model from bag" if model_name.blank?
       new_object = ActiveFedora.class_from_string(model_name.to_s).new
       # Assign a pid
-      new_object.inner_object.pid = ActiveFedora::Base.assign_pid(new_object)
+      new_object.inner_object.pid = new_object.inner_object.assign_pid
       set_metadata_streams(new_object)
       set_file_streams(new_object)
       return new_object
