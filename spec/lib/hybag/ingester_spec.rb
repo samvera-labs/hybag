@@ -87,7 +87,6 @@ describe Hybag::Ingester do
           expect(subject.ingest).to be_kind_of(BaggableDummy)
         end
         it "should assign that model a pid" do
-          puts ActiveFedora::Base.assign_pid
           expect((subject.ingest).pid).to eq "new_filler"
         end
         context "and that model is not defined" do
