@@ -9,6 +9,8 @@ describe Hybag::Baggable do
     @item.descMetadata.content = File.open(File.join(FIXTURE_PATH,"example_datastream.nt")).read
     content_file = File.open(File.join(FIXTURE_PATH,"hydra.png"))
     @item.add_file_datastream(content_file, :dsid => "content", :mimeType => "image/png")
+    @item.rels_ext.content = File.open(File.join(FIXTURE_PATH,"rels.rdf")).read
+    @item.load_relationships
     @item.stub(:persisted?).and_return(true)
     # Stub Rails root
     rails = double("Rails")
@@ -45,8 +47,7 @@ describe Hybag::Baggable do
         @bag = @item.write_bag('/tmp/bag')
       end
       it "should write tag files to disk" do
-        # TODO: stub out a rels-ext to make sure this happens.
-        #@bag.tag_files.should include(File.join(@bag.bag_dir, 'fedora', 'RELS-EXT.rdf'))
+        @bag.tag_files.should include(File.join(@bag.bag_dir, 'fedora', 'RELS-EXT.rdf'))
         @bag.tag_files.should include(File.join(@bag.bag_dir, 'descMetadata.nt'))
       end
       it "should write content files to disk" do
