@@ -21,7 +21,7 @@ end
 describe Hybag::Ingester do
   before(:each) do
     @item = BaggableDummy.new(:pid => "filler")
-    @item.descMetadata.content = File.open(File.join(FIXTURE_PATH,"example_datastream.nt")).read
+    @item.descMetadata.content = File.open(File.join(FIXTURE_PATH,"example_datastream.nt")).read.strip
     content_file = File.open(File.join(FIXTURE_PATH,"hydra.png"))
     @item.add_file_datastream(content_file, :dsid => "content", :mimeType => "image/png")
     @item.rels_ext.content = File.open(File.join(FIXTURE_PATH,"rels.rdf")).read
@@ -31,6 +31,8 @@ describe Hybag::Ingester do
     rails = double("Rails")
     Rails = rails unless defined?(Rails)
     Rails.stub(:root).and_return(Pathname.new('/test'))
+    # Stub ActiveFedora assign_pid
+    ActiveFedora::Base.stub(:assign_pid).and_return("new_filler")
   end
   let(:item) {@item}
   let(:bag) {item.write_bag}
@@ -71,26 +73,45 @@ describe Hybag::Ingester do
         end
       end
     end
-    describe ".ingest!" do
+    describe ".ingest" do
       context "when there is no discoverable model" do
         before(:each) do
           subject.stub(:model_name).and_return(nil)
         end
         it "should raise an error" do
-          expect{subject.ingest!}.to raise_error("Unable to determine model from bag")
+          expect{subject.ingest}.to raise_error("Unable to determine model from bag")
         end
       end
       context "when there is a model" do
         it "should return an instance of that model" do
-          expect(subject.ingest!).to be_kind_of(BaggableDummy)
+          expect(subject.ingest).to be_kind_of(BaggableDummy)
+        end
+        it "should assign that model a pid" do
+          puts ActiveFedora::Base.assign_pid
+          expect((subject.ingest).pid).to eq "new_filler"
         end
         context "and that model is not defined" do
           before(:each) do
             subject.stub(:model_name).and_return("Blabla")
           end
           it "should raise an error" do
-            expect{subject.ingest!}.to raise_error
+            expect{subject.ingest}.to raise_error
           end
+        end
+      end
+      describe "returned model" do
+        let(:built_model) {subject.ingest}
+        it "should populate datastreams" do
+          Array.wrap(built_model.title).first.should == "Mexican workers"
+        end
+        it "should populate file datastreams" do
+          built_model.content.content.should == File.read(File.join(bag.data_dir,"content.png"))
+        end
+        it "should be new" do
+          expect(built_model).to be_new
+        end
+        it "should not be persisted" do
+          expect(built_model).not_to be_persisted
         end
       end
     end

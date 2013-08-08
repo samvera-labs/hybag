@@ -9,5 +9,7 @@ require 'hybag/bag_writer'
 require 'hybag/ingester'
 
 module Hybag
-
+  def self.ingest(bag)
+    Hybag::Ingester.new(bag).ingest
+  end
 end
