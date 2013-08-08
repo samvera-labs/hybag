@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["trey.terrell@oregonstate.edu"]
   spec.description   = 'A Hydra gem for adding BagIt functionality to ActiveFedora models.'
   spec.summary       = 'A Hydra gem for adding BagIt functionality to ActiveFedora models.'
-  spec.homepage      = ""
+  spec.homepage      = 'https://github.com/osulp/hybag'
   spec.license       = "APACHE2"
 
   spec.files         = `git ls-files`.split($/)
