@@ -19,58 +19,64 @@ module Hybag
 
     private
 
-    # TODO: What to do if the bag has files that don't have model definitions?
     # TODO: Add some sort of configuration to map bag filenames -> dsids.
     def set_metadata_streams(object)
-      object.metadata_streams.each do |ds|
-        if bag_has_metastream?(ds.dsid)
-          ds.content = bag_metastream(ds.dsid).read.strip
-          # Assume the first subject in the metadata is about this object.
-          # TODO: Move this to configuration?
-          first_subject = ds.graph.first_subject
-          new_repository = RDF::Repository.new
-          ds.graph.each_statement do |statement|
-            subject = statement.subject
-            subject = ds.rdf_subject if subject == first_subject
-            new_repository << [subject, statement.predicate, statement.object]
-          end
-          ds.instance_variable_set(:@graph,new_repository)
-        end
+      bag_tag_files.each do |tag_file|
+        add_bag_file_to_object(object, tag_file, false)
       end
     end
 
-    def set_file_streams(object)
-      file_streams = object.datastreams.select{|k, ds| !ds.metadata?}.values
-      file_streams.each do |ds|
-        if bag_has_datastream?(ds.dsid)
-          ds.content = bag_datastream(ds.dsid).read
+
+    # Returns all registered tag files except those generated for the bag
+    # These includes the bag_info.txt, bagit.txt, and manifest files.
+    def bag_tag_files
+      bag.tag_files - [bag.bag_info_txt_file] - bag.manifest_files - [bag.bagit_txt_file]
+    end
+
+    def add_bag_file_to_object(object, bag_file, binary=true)
+      parsed_name = bag_filename_to_label(bag_file)
+      found_datastream = object.datastreams.values.find{|x| x.dsid.downcase == bag_filename_to_label(bag_file).downcase}
+      content = File.open(bag_file).read
+      content = transform_content(content) unless binary
+      if found_datastream
+        found_datastream = replace_subject(content, found_datastream)
+      else
+        object.add_file_datastream(content, :dsid => parsed_name)
+      end
+    end
+
+    def transform_content(content)
+      content = content.strip
+    end
+
+    # Replaces the subject in RDF files with the datastream's rdf_subject.
+    # TODO: Deal with what happens when there's no defined datastream.
+    def replace_subject(content, ds)
+      ds.content = content
+      if ds.respond_to?(:rdf_subject)
+        # Assume the first subject in the metadata is about this object.
+        # TODO: Move this to configuration?
+        first_subject = ds.graph.first_subject
+        new_repository = RDF::Repository.new
+        ds.graph.each_statement do |statement|
+          subject = statement.subject
+          subject = ds.rdf_subject if subject == first_subject
+          new_repository << [subject, statement.predicate, statement.object]
         end
+        ds.instance_variable_set(:@graph,new_repository)
+      end
+      return ds
+    end
+
+    def set_file_streams(object)
+      bag.bag_files.each do |bag_file|
+        add_bag_file_to_object(object, bag_file)
       end
     end
 
     # TODO: Might consider decoration at some point.
     def bag_filename_to_label(bag_filename)
       Pathname.new(bag_filename).basename.sub_ext('').to_s
-    end
-
-    def bag_has_datastream?(label)
-      bag.bag_files.any?{|x| bag_filename_to_label(x) == label}
-    end
-
-    def bag_datastream(label)
-      bag_file = bag.bag_files.select{|x| bag_filename_to_label(x) == label}.first
-      result = File.open(bag_file) unless bag_file.blank?
-      return result
-    end
-
-    def bag_has_metastream?(label)
-      bag.tag_files.any?{|x| bag_filename_to_label(x) == label}
-    end
-
-    def bag_metastream(label)
-      tag_file = bag.tag_files.select{|x| bag_filename_to_label(x) == label}.first
-      result = File.open(tag_file) unless tag_file.blank?
-      return result
     end
 
     def model_name

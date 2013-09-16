@@ -112,6 +112,49 @@ describe Hybag::Ingester do
         it "should not be persisted" do
           expect(built_model).not_to be_persisted
         end
+        context "when there is a file datastream and no matching datastream defined" do
+          before(:each) do
+            # Add the hydra.png from fixture
+            FakeFS.deactivate!
+            hybag_content = File.read(File.join(FIXTURE_PATH,"hydra.png"))
+            FakeFS.activate!
+            File.open(File.join(bag.data_dir,"new_content.png"),'wb') {|f| f.puts hybag_content}
+          end
+          it "should add that datastream" do
+            expect(built_model.datastreams.keys).to include("new_content")
+          end
+        end
+        context "when there is a metadata stream and no matching datastream defined" do
+          before(:each) do
+            # Add the example_datastream.nt from fixture
+            FakeFS.deactivate!
+            @hybag_content = File.read(File.join(FIXTURE_PATH,"example_datastream.nt"))
+            FakeFS.activate!
+            bag.add_tag_file("example_datastream.nt") do |f|
+              f.write @hybag_content
+            end
+          end
+          it "should add that file as a datastream" do
+            expect(built_model.datastreams.keys).to include("example_datastream")
+            expect(built_model.datastreams.values.find{|x| x.dsid == "example_datastream"}.content).to eq @hybag_content.strip
+          end
+          context "and it's an RDF datastream" do
+            it "should replace the subject"
+          end
+        end
+        context "when there is an unregistered tag file and no matching datastream defined" do
+          before(:each) do
+            FakeFS.deactivate!
+            @hybag_content = File.read(File.join(FIXTURE_PATH,"example_datastream.nt"))
+            FakeFS.activate!
+            File.open(File.join(bag.bag_dir, "new_tag_file.nt"), 'wb') {|f| f.puts @hybag_content}
+          end
+          # TODO: Write this when bagit supports returning unmarked tag files.
+          xit "should add that datastream" do
+            expect(built_model.datastreams.keys).to include("new_tag_file")
+            expect(built_model.datastreams.values.find{|x| x.dsid == "new_tag_file"}.content).to eq @hybag_content.strip
+          end
+        end
       end
     end
   end
