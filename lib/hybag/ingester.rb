@@ -36,7 +36,9 @@ module Hybag
     def add_bag_file_to_object(object, bag_file, binary=true)
       parsed_name = bag_filename_to_label(bag_file)
       found_datastream = object.datastreams.values.find{|x| x.dsid.downcase == bag_filename_to_label(bag_file).downcase}
-      content = File.open(bag_file).read
+      open_tag = 'r'
+      open_tag = 'rb' if binary
+      content = File.open(bag_file, open_tag).read
       content = transform_content(content) unless binary
       if found_datastream
         found_datastream = replace_subject(content, found_datastream)
