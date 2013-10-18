@@ -9,7 +9,7 @@ module Hybag
 
     def ingest
       raise "Unable to determine model from bag" if model_name.blank?
-      new_object = ActiveFedora.class_from_string(model_name.to_s).new
+      new_object = model_name.constantize.new
       # Assign a pid
       new_object.inner_object.pid = new_object.inner_object.assign_pid
       set_metadata_streams(new_object)
