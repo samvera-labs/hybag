@@ -11,7 +11,7 @@ module Hybag
 
     def validate!
       unless self.valid?
-        raise "Invalid Object for bagging"
+        raise Hybag::InvalidBaggable.new(bag)
       end
     end
 

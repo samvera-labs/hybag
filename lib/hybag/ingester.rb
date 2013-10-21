@@ -8,7 +8,7 @@ module Hybag
     end
 
     def ingest
-      raise "Unable to determine model from bag" if model_name.blank?
+      raise Hybag::UndiscoverableModelName.new(bag) if model_name.blank?
       new_object = model_name.constantize.new
       # Assign a pid
       new_object.inner_object.pid = new_object.inner_object.assign_pid
