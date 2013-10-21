@@ -79,7 +79,7 @@ describe Hybag::Ingester do
           subject.stub(:model_name).and_return(nil)
         end
         it "should raise an error" do
-          expect{subject.ingest}.to raise_error("Unable to determine model from bag")
+          expect{subject.ingest}.to raise_error(Hybag::UndiscoverableModelName)
         end
       end
       context "when there is a model" do
@@ -94,7 +94,7 @@ describe Hybag::Ingester do
             subject.stub(:model_name).and_return("Blabla")
           end
           it "should raise an error" do
-            expect{subject.ingest}.to raise_error
+            expect{subject.ingest}.to raise_error(NameError)
           end
         end
       end

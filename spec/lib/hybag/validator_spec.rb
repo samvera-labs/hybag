@@ -43,7 +43,7 @@ describe Hybag::Validator do
         dummy.stub(:baggable?).and_return(false)
       end
       it "should raise an error" do
-        expect{subject.validate!}.to raise_error
+        expect{subject.validate!}.to raise_error(Hybag::InvalidBaggable)
       end
     end
   end
