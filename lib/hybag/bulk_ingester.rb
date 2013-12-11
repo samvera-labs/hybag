@@ -1,0 +1,3 @@
+class Hybag::BulkIngester
+
+end

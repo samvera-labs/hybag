@@ -7,6 +7,7 @@ require 'hybag/baggable'
 require 'hybag/validator'
 require 'hybag/bag_writer'
 require 'hybag/ingester'
+require 'hybag/bulk_ingester'
 
 module Hybag
   def self.ingest(bag)
