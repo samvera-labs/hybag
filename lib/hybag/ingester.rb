@@ -2,7 +2,7 @@ require 'rdf/rdfxml'
 
 module Hybag
   class Ingester
-    attr_accessor :bag
+    attr_accessor :bag, :model_name
     def initialize(bag)
       @bag = bag
     end
@@ -15,6 +15,12 @@ module Hybag
       set_metadata_streams(new_object)
       set_file_streams(new_object)
       return new_object
+    end
+
+    def model_name
+      # TODO: Add a default model_name configuration option?
+      @model_name ||= extract_model_from_rels
+
     end
 
     private
@@ -81,12 +87,6 @@ module Hybag
       Pathname.new(bag_filename).basename.sub_ext('').to_s
     end
 
-    def model_name
-      # TODO: Add a default model_name configuration option?
-      @model_name ||= extract_model_from_rels || extract_model_from_yaml
-
-    end
-
     def extract_model_from_rels
       if File.exist?(fedora_rels)
         filler_object = ActiveFedora::Base.new
@@ -97,19 +97,6 @@ module Hybag
         return model_name.to_s
       end
       return model_name
-    end
-
-    def extract_model_from_yaml
-      model_name = nil
-      if(File.exist?(yaml_config))
-        conf = YAML.load(File.read(yaml_config))
-        model_name = conf['model']
-      end
-      return model_name
-    end
-
-    def yaml_config
-      File.join(bag.bag_dir,"hybag.yml")
     end
 
     def fedora_rels

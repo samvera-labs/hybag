@@ -43,11 +43,15 @@ datastream to be populated bag_root/descMetadata.* (where * is the extension) mu
 #### Determining the model name.
 
 Currently the model name is determined from the bag's fedora/rels-ext.rdf file (which Hybag::Baggable exports)
-or a config file stored in bag_root/hybag.yml. The fedora rels-ext takes precedence. An example Hybag.yml format is
-below
+or is configurable via a block as shown before
 
-```yml
-model: TestModel
+```ruby
+bag = Bagit::Bag.new("/path/to/bag")
+test_class = Hybag.ingest(bag) do |ingester|
+  ingester.bag == bag # => true
+  ingester.model_name = "ActiveFedora::Base"
+end
+test_class.class # => ActiveFedora::Base
 ```
 
 ### Examples

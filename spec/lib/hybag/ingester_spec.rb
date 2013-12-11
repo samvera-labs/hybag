@@ -46,32 +46,40 @@ describe Hybag::Ingester do
         end
       end
       context "when there is no rels" do
-        context "when there is a hybag.yml" do
+        context "but a model name is explicitly configured" do
           before(:each) do
-            FileUtils.rm(subject.send(:fedora_rels), :force => true)
-            # Add the hybag.yml from fixture
-            FakeFS.deactivate!
-            hybag_content = File.read(File.join(FIXTURE_PATH,"hybag.yml"))
-            FakeFS.activate!
-            File.open(File.join(bag.bag_dir,"hybag.yml"),'w') {|f| f.puts hybag_content}
+            subject.model_name = "TestModel"
           end
-          it "should pull the data out of hybag.yml" do
-            subject.send(:model_name).should == "TestModel"
+          it "should have a configured model name" do
+            expect(subject.send(:model_name)).to eq "TestModel"
           end
         end
+        #context "when there is a hybag.yml" do
+        #  before(:each) do
+        #    FileUtils.rm(subject.send(:fedora_rels), :force => true)
+        #    # Add the hybag.yml from fixture
+        #    FakeFS.deactivate!
+        #    hybag_content = File.read(File.join(FIXTURE_PATH,"hybag.yml"))
+        #    FakeFS.activate!
+        #    File.open(File.join(bag.bag_dir,"hybag.yml"),'w') {|f| f.puts hybag_content}
+        #  end
+        #  it "should pull the data out of hybag.yml" do
+        #    subject.send(:model_name).should == "TestModel"
+        #  end
+        #end
       end
-      context "when there is a rels and a hybag.yml" do
-        before(:each) do
-          # Add the hybag.yml from fixture
-          FakeFS.deactivate!
-          hybag_content = File.read(File.join(FIXTURE_PATH,"hybag.yml"))
-          FakeFS.activate!
-          File.open(File.join(bag.bag_dir,"hybag.yml"),'w') {|f| f.puts hybag_content}
-        end
-        it "should prioritize the rels" do
-          subject.send(:model_name).should == "BaggableDummy"
-        end
-      end
+      #context "when there is a rels and a hybag.yml" do
+      #  before(:each) do
+      #    # Add the hybag.yml from fixture
+      #    FakeFS.deactivate!
+      #    hybag_content = File.read(File.join(FIXTURE_PATH,"hybag.yml"))
+      #    FakeFS.activate!
+      #    File.open(File.join(bag.bag_dir,"hybag.yml"),'w') {|f| f.puts hybag_content}
+      #  end
+      #  it "should prioritize the rels" do
+      #    subject.send(:model_name).should == "BaggableDummy"
+      #  end
+      #end
     end
     describe ".ingest" do
       context "when there is no discoverable model" do

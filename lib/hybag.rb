@@ -10,7 +10,9 @@ require 'hybag/ingester'
 
 module Hybag
   def self.ingest(bag)
-    Hybag::Ingester.new(bag).ingest
+    ingester = Hybag::Ingester.new(bag)
+    yield(ingester) if block_given?
+    ingester.ingest
   end
 
   # Error Classes
