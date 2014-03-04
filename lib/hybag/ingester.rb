@@ -59,21 +59,21 @@ module Hybag
 
     # Replaces the subject in RDF files with the datastream's rdf_subject.
     # TODO: Deal with what happens when there's no defined datastream.
-    def replace_subject(content, ds)
+    def replace_subject(content, ds, old_subject=nil)
       ds.content = content
       if ds.respond_to?(:rdf_subject)
         # Assume the first subject in the metadata is about this object.
         # TODO: Move this to configuration?
-        first_subject = ds.graph.first_subject
+        old_subject ||= ds.graph.first_subject
         new_repository = RDF::Repository.new
         ds.graph.each_statement do |statement|
-          subject = statement.subject
-          subject = ds.rdf_subject if subject == first_subject
-          new_repository << [subject, statement.predicate, statement.object]
+          if statement.subject == old_subject
+            ds.graph.delete statement
+            ds.graph << RDF::Statement.new(ds.rdf_subject, statement.predicate, statement.object)
+          end
         end
-        ds.instance_variable_set(:@graph,new_repository)
       end
-      return ds
+      ds
     end
 
     def set_file_streams(object)
