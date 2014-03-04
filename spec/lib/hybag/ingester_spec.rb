@@ -87,7 +87,7 @@ describe Hybag::Ingester do
           Array.wrap(built_model.title).first.should == "Mexican workers"
         end
         it "should populate file datastreams" do
-          built_model.content.content.should == File.read(File.join(bag.data_dir,"content.png"))
+          built_model.content.content.should == File.open(File.join(bag.data_dir, 'content.png'), 'rb').read
         end
         it "should be new" do
           expect(built_model).to be_new
