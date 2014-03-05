@@ -95,6 +95,14 @@ describe Hybag::Ingester do
         it "should not be persisted" do
           expect(built_model).not_to be_persisted
         end
+        context "when old_subject has been set" do
+          before(:each) do
+            subject.old_subject = "http://oregondigital.org/resource/oregondigital:1"
+          end
+          it "should only replace those subjects" do
+            expect(built_model.title.first).to eq "Test Title"
+          end
+        end
         context "when there is a file datastream and no matching datastream defined" do
           before(:each) do
             # Add the hydra.png from fixture

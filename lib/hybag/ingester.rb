@@ -2,7 +2,7 @@ require 'rdf/rdfxml'
 
 module Hybag
   class Ingester
-    attr_accessor :bag, :model_name
+    attr_accessor :bag, :model_name, :old_subject
     def initialize(bag)
       @bag = bag
     end
@@ -59,12 +59,12 @@ module Hybag
 
     # Replaces the subject in RDF files with the datastream's rdf_subject.
     # TODO: Deal with what happens when there's no defined datastream.
-    def replace_subject(content, ds, old_subject=nil)
+    def replace_subject(content, ds)
       ds.content = content
       if ds.respond_to?(:rdf_subject)
         # Assume the first subject in the metadata is about this object.
         # TODO: Move this to configuration?
-        old_subject ||= ds.graph.first_subject
+        old_subject = self.old_subject || ds.graph.first_subject
         new_repository = RDF::Repository.new
         ds.graph.each_statement do |statement|
           if statement.subject == old_subject
