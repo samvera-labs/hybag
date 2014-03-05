@@ -5,6 +5,7 @@
 <info:fedora/filler> <http://purl.org/dc/terms/rights> "Permission to use must be obtained from OSU Archives." .
 <info:fedora/filler> <http://multimedialab.elis.ugent.be/users/samcoppe/ontologies/Premis/premis.owl#originalName> "P0120_2567" .
 <info:fedora/filler> <http://purl.org/dc/terms/title> "Mexican workers" .
+<http://oregondigital.org/resource/oregondigital:1> <http://purl.org/dc/terms/title> "Test Title" .
 <info:fedora/filler> <http://purl.org/dc/terms/subject> "Agricultural laborers--Mexican--Oregon" .
 <info:fedora/filler> <http://purl.org/dc/terms/subject> "Agricultural laborers--Housing--Oregon" .
 <info:fedora/filler> <http://purl.org/dc/terms/identifier> "P120:2567" .

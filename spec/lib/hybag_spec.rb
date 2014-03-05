@@ -60,9 +60,11 @@ describe Hybag do
       Hybag::Ingester.any_instance.should_receive(:ingest).and_return("bla")
       Hybag.ingest("empty") do |ingester|
         ingester.model_name = "TestModel"
+        ingester.old_subject = "http://test.org"
         ingesting = ingester
       end
       expect(ingesting.model_name).to eq "TestModel"
+      expect(ingesting.old_subject).to eq "http://test.org"
     end
   end
 end
