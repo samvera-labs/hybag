@@ -63,7 +63,6 @@ module Hybag
       ds.content = content
       if ds.respond_to?(:rdf_subject)
         # Assume the first subject in the metadata is about this object.
-        # TODO: Move this to configuration?
         old_subject = self.old_subject || ds.graph.first_subject
         new_repository = RDF::Repository.new
         ds.graph.each_statement do |statement|
